@@ -44,6 +44,9 @@ MongoClient.connect(uri, {
         console.error(error)
     })
 
+//app.use(express,json())
+//app.use(express.urldecoded({ extended: true }))
+
 
 /**
  * VIEW EXAMPLE
@@ -92,11 +95,16 @@ router.get('users/del/:username', function(req, res) {
     const collection = req.app.locals.usersCollection;
     const username = req.params.username; //get the parameter from the url
 
-    collection.remove({
+    /**
+     * if using ID need to parse it as object id
+     * const id = new ObjectId(req.params.id)
+     */
+
+    collection.deleteOne({ //can also use deleteMany()
         username: username
     })
     .then(result => {
-        res.json(result.result.n) //this line shows how many documents where deleted. from here we do and if satement to detect if something was deleted
+        res.json(result.result.n) //this line shows how many documents where deleted.
     })
 
 })
@@ -105,6 +113,10 @@ router.get('users/del/:username', function(req, res) {
 
 /**
  * to add a new item we use again router
- * instead of find() we use insert()
+ * instead of find() we use insertOne() or insertMany()
  * for more commands visit mongodb docs
+ * 
+ * inserting data we need to pass the info onto the page of insert
+ * app.use(express,json())
+ * app.use(express.urldecoded({ extended: true }))
  */
