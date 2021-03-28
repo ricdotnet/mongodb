@@ -67,7 +67,7 @@ router.get('/users', function(req, res) {
 })
 
 //retrieving one result with username
-router.get('/users/:username', function(req, res) {
+router.get('/users/get/:username', function(req, res) {
 
     //get the collection
     const collection = req.app.locals.collectionName; //repeated const can be global
@@ -85,6 +85,23 @@ router.get('/users/:username', function(req, res) {
             console.error(error)
         })
 })
+
+//deleting a document/record
+router.get('users/del/:username', function(req, res) {
+
+    const collection = req.app.locals.usersCollection;
+    const username = req.params.username; //get the parameter from the url
+
+    collection.remove({
+        username: username
+    })
+    .then(result => {
+        res.json(result.result.n) //this line shows how many documents where deleted. from here we do and if satement to detect if something was deleted
+    })
+
+})
+
+
 
 /**
  * to add a new item we use again router
